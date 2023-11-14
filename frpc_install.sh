@@ -25,25 +25,25 @@ WantedBy=multi-user.target
 "
 
 cfg="
-serverAddr = \"${FRPS_ARRD}\"
+serverAddr = \"${FRPS_ADDR}\"
 serverPort = ${FRPS_PORT:-4396}
 
 [[proxies]]
-name = \"ssh\"
+name = \"${HOSTNAME}-ssh\"
 type = \"tcp\"
 localIP = \"127.0.0.1\"
 localPort = 22
 remotePort = $((FRPC_BASE_PORT + 22))
 
 [[proxies]]
-name = \"portal\"
+name = \"${HOSTNAME}-portal\"
 type = \"tcp\"
 localIP = \"127.0.0.1\"
 localPort = 30443
 remotePort = $((FRPC_BASE_PORT + 443))
 
 [[proxies]]
-name = \"cas\"
+name = \"${HOSTNAME}-cas\"
 type = \"tcp\"
 localIP = \"127.0.0.1\"
 localPort = 32708
@@ -87,6 +87,7 @@ startFRPCSvc() {
 }
 
 isActive() {
+  sudo hostnamectl set-hostname "${HOSTNAME}"
   if systemctl is-active "${1}" >/dev/null 2>&1; then
     echo "Service is currently running."
     return 0
