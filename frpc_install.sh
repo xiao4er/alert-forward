@@ -52,7 +52,6 @@ remotePort = $((FRPC_BASE_PORT + 708))
 
 startFRPCSvc() {
   sudo cp -b $cmdLoc $cmdTgt
-  sudo cp -b $cfgLoc $cfgTgt
   if [ ! -e $svcFile ]; then
     echo "$svc service file not exist, init it with following content:"
     echo $svcFile
@@ -64,6 +63,7 @@ startFRPCSvc() {
     echo "$cfgLoc config file not exist, init it with following content:"
     echo $cfgLoc
     echo "$cfg" | sudo tee $cfgLoc
+    sudo cp -b $cfgLoc $cfgTgt
   fi
 
 
