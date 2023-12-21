@@ -40,7 +40,7 @@ setup_values() {
   local_ip=$(kubectl get node -owide|grep master|awk '{print $6}'|grep -v INTERNAL)
 
   sed -i 's|type: local|type: nfs|g' "$VALUES_LOC"
-  sed -i "s|local:\n      |nfs:\n      server: ${local_ip}\n|g" "$VALUES_LOC"
+  sed -i "s|    local:|    nfs:\n      server: ${local_ip}\n|g" "$VALUES_LOC"
 }
 
 uninstall() {
