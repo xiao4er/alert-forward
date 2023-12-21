@@ -37,10 +37,10 @@ setup_nfs_server() {
 
 setup_values() {
   local local_ip
-  local_ip=$(kubectl get node -owide | awk '{print $6}' | grep -v "INTERNAL-IP")
+  local_ip=$(kubectl get node -owide|grep master|awk '{print $6}'|grep -v INTERNAL)
 
   sed -i 's|type: local|type: nfs|g' "$VALUES_LOC"
-  sed -i "s|local:\n      |nfs:\n      server: ${local_ip}\n|" "$VALUES_LOC"
+  sed -i "s|local:\n      |nfs:\n      server: ${local_ip}\n|g" "$VALUES_LOC"
 }
 
 uninstall() {
@@ -86,6 +86,7 @@ register_worker
 {
   setup_nfs_server
   uninstall
+  setup_values
   install
   show_worker_info
 }
